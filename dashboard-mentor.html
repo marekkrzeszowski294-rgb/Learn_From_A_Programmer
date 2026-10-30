@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Panel mentora Learn From A Programmer — uczniowie, spotkania i postępy.">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <title>Panel mentora — Learn From A Programmer</title>
+  <link rel="stylesheet" href="account.css">
+  <script src="backend.js" defer></script>
+  <script src="account.js" defer></script>
+</head>
+<body class="dashboard-body" data-dashboard-role="mentor">
+  <header class="dashboard-topbar">
+    <a class="brand" href="Web.html" aria-label="Learn From A Programmer — strona główna"><img class="brand-image" src="logo.png" width="1200" height="320" alt="Learn From A Programmer — kodowanie z mentorem na żywo"></a>
+    <nav aria-label="Nawigacja panelu"><a href="#zgloszenia">Zgłoszenia</a><a href="Web.html">Strona główna</a><button class="button button--dark" type="button" data-logout>Wyloguj</button></nav>
+  </header>
+  <main class="dashboard">
+    <p class="form-message" data-dashboard-message role="status" hidden></p>
+    <section class="dashboard-heading">
+      <div><span class="eyebrow">Panel mentora</span><h1 data-dashboard-heading>Ładowanie panelu…</h1><p>Zgłoszenia są zapisywane, ale wymagają przypisania do mentora.</p></div>
+      <span class="role-pill">Mentor</span>
+    </section>
+    <section class="stats-grid" aria-label="Statystyki mentora">
+      <article class="stat-card"><span class="stat-label">Zgłoszenia przypisane do Ciebie</span><strong data-request-count>0</strong><small>Nowe zgłoszenia są przechowywane w bazie</small></article>
+    </section>
+    <div class="dashboard-grid">
+      <div>
+        <section class="panel" id="zgloszenia">
+          <div class="panel-heading"><h2>Moje zgłoszenia</h2></div>
+          <div data-mentor-requests><p class="quiet-note">Ładowanie zgłoszeń…</p></div>
+        </section>
+      </div>
+      <aside>
+        <section class="panel">
+          <div class="panel-heading"><h2>Obsługa zgłoszeń</h2></div>
+          <div class="checkpoint"><h3>Brak przypisanych zgłoszeń</h3><p>Wiadomości z formularza trafiają do bazy. Przypisywanie zgłoszeń, zarządzanie terminami i dostęp administracyjny nie są jeszcze dostępne.</p></div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><h2>Szybkie działania</h2></div>
+          <ul class="list-clean">
+            <li><span class="list-icon">＋</span><span><strong>Zgłoszenia są zapisywane</strong><small>Dane kontaktowe nie są udostępniane nieprzypisanym mentorom.</small></span></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+    <p class="dashboard-footer">Learn From A Programmer · Panel mentora</p>
+  </main>
+</body>
+</html>

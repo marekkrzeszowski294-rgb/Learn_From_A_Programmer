@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Ucz się programowania z aktywnym programistą. Praktyczne lekcje 1:1, wspólne kodowanie i plan dopasowany do Ciebie.">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <title>Learn From A Programmer — nauka programowania z mentorem na żywo</title>
+  <script src="backend.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172235;
+      --muted: #647084;
+      --navy: #101827;
+      --navy-soft: #172338;
+      --paper: #fbfaf7;
+      --white: #fff;
+      --lime: #c9f36a;
+      --lime-dark: #9dc83c;
+      --line: #e8e8e1;
+      --violet: #8d7bff;
+      --radius: 22px;
+      --shadow: 0 24px 70px rgba(17, 26, 42, .12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; color: var(--ink); background: var(--paper); }
+    body, button, input, select { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--lime-dark);
+      outline-offset: 3px;
+    }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: #60723a; font-size: .76rem; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+    }
+    .eyebrow::before { width: 8px; height: 8px; content: ""; border-radius: 50%; background: var(--lime-dark); }
+    .section-heading { max-width: 650px; margin: 0 auto 50px; text-align: center; }
+    .section-heading h2 {
+      margin: 14px 0 14px; font-size: clamp(2rem, 4vw, 3.1rem);
+      line-height: 1.08; letter-spacing: -.055em;
+    }
+    .section-heading p { max-width: 540px; margin: 0 auto; color: var(--muted); line-height: 1.75; }
+    .button {
+      min-height: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 0 21px; border: 0; border-radius: 999px; background: var(--lime);
+      color: var(--navy); font-size: .91rem; font-weight: 800; cursor: pointer;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); background: #d7ff83; box-shadow: 0 10px 24px rgba(201, 243, 106, .2); }
+    .button svg { width: 17px; height: 17px; }
+    .button--dark { background: var(--navy); color: var(--white); }
+    .button--dark:hover { background: #263750; }
+    .button--outline { min-height: 48px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: white; }
+    .button--outline:hover { background: rgba(255,255,255,.08); box-shadow: none; }
+
+    .topbar { position: sticky; z-index: 20; top: 0; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(16,24,39,.96); backdrop-filter: blur(14px); }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; color: white; }
+    .brand { display: inline-flex; flex: 0 0 auto; align-items: center; }
+    .brand-image { display: block; width: 250px; max-width: 100%; height: auto; }
+    .nav-links { display: flex; align-items: center; gap: 32px; color: #c4cbd6; font-size: .88rem; font-weight: 600; }
+    .nav-links a:hover { color: white; }
+    .nav .button { min-height: 43px; padding-inline: 17px; font-size: .82rem; }
+    .menu-toggle { display: none; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; background: transparent; color: white; cursor: pointer; }
+    .menu-toggle svg { width: 21px; height: 21px; }
+
+    .hero {
+      position: relative; overflow: hidden; padding: 84px 0 94px;
+      background: var(--navy); color: white;
+    }
+    .hero::before {
+      position: absolute; inset: 0; content: ""; pointer-events: none; opacity: .14;
+      background-image: linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px);
+      background-size: 54px 54px; mask-image: linear-gradient(90deg, transparent, black 62%, black);
+    }
+    .hero::after { position: absolute; top: -260px; right: -120px; width: 650px; height: 650px; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(141,123,255,.19), transparent 68%); pointer-events: none; }
+    .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: 64px; }
+    .hero-copy { max-width: 570px; }
+    .hero .eyebrow { color: var(--lime); }
+    .hero h1 { margin: 22px 0; font-size: clamp(2.8rem, 5.3vw, 4.65rem); line-height: .99; letter-spacing: -.075em; }
+    .hero h1 span { color: var(--lime); }
+    .hero-copy > p { max-width: 520px; margin: 0; color: #bac4d2; font-size: 1.08rem; line-height: 1.75; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .social-proof { display: flex; align-items: center; gap: 14px; margin-top: 37px; color: #b7c1ce; font-size: .82rem; }
+    .avatar-stack { display: flex; padding-left: 4px; }
+    .avatar-stack span { width: 31px; height: 31px; display: grid; place-items: center; margin-left: -5px; border: 2px solid var(--navy); border-radius: 50%; background: #efb48c; color: #432d25; font-size: .72rem; font-weight: 800; }
+    .avatar-stack span:nth-child(2) { background: #a7c7c1; }
+    .avatar-stack span:nth-child(3) { background: #d8b6e8; }
+    .avatar-stack span:nth-child(4) { background: #f0d26c; }
+    .social-proof strong { color: white; }
+
+    .session-card { position: relative; padding: 16px; border: 1px solid rgba(255,255,255,.14); border-radius: 25px; background: rgba(255,255,255,.07); box-shadow: 0 32px 80px rgba(0,0,0,.26); transform: rotate(1deg); }
+    .session-top { display: flex; align-items: center; justify-content: space-between; padding: 2px 3px 14px; color: #dce3ed; font-size: .78rem; }
+    .live-badge { display: inline-flex; align-items: center; gap: 7px; color: #d4ff91; font-weight: 750; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #c9f36a; box-shadow: 0 0 12px #c9f36a; }
+    .call-screen { position: relative; min-height: 263px; display: grid; place-items: center; overflow: hidden; border-radius: 17px; background: linear-gradient(145deg, #293d51, #344d54 55%, #8a9e77); }
+    .call-screen::before, .call-screen::after { position: absolute; bottom: -50px; width: 170px; height: 230px; content: ""; border-radius: 90px 90px 0 0; background: linear-gradient(160deg, #c8d3c4, #667e7b); }
+    .call-screen::before { left: 10%; transform: rotate(8deg); }
+    .call-screen::after { right: 7%; background: linear-gradient(160deg, #efc3a0, #6e5261); transform: rotate(-8deg); }
+    .window-light { position: absolute; top: 0; left: 18%; width: 32%; height: 60%; background: linear-gradient(135deg, rgba(249,243,210,.48), rgba(255,255,255,.08)); clip-path: polygon(0 0,100% 0,100% 90%,0 100%); }
+    .mentor-head, .student-head { position: absolute; z-index: 1; bottom: 116px; width: 66px; height: 78px; border-radius: 48% 48% 45% 45%; background: #e4b493; }
+    .mentor-head { left: 22%; background: #c78d6e; }
+    .student-head { right: 22%; background: #f0c4a0; }
+    .mentor-head::before, .student-head::before { position: absolute; top: -8px; left: -3px; width: 72px; height: 35px; content: ""; border-radius: 55% 55% 25% 35%; background: #24252b; }
+    .student-head::before { background: #684536; }
+    .call-label { position: absolute; z-index: 2; bottom: 13px; left: 13px; padding: 7px 10px; border-radius: 8px; background: rgba(16,24,39,.72); color: white; font-size: .69rem; }
+    .call-controls { position: absolute; z-index: 3; bottom: 13px; left: 50%; display: flex; gap: 8px; transform: translateX(-50%); }
+    .call-controls span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(20,29,42,.78); color: white; font-size: .8rem; }
+    .call-controls .end-call { background: #f06b68; }
+    .session-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 3px 1px; }
+    .mentor-info { display: flex; align-items: center; gap: 10px; }
+    .mentor-avatar { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: #dfb39b; color: #45342d; font-size: .75rem; font-weight: 800; }
+    .mentor-info strong, .mentor-info small { display: block; }
+    .mentor-info strong { color: white; font-size: .8rem; }
+    .mentor-info small { margin-top: 3px; color: #aab5c2; font-size: .68rem; }
+    .session-time { color: #e4e9f1; font-size: .75rem; }
+    .code-float { position: absolute; right: -32px; bottom: 62px; width: 192px; padding: 13px 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 13px; background: #172338; box-shadow: 0 14px 34px rgba(0,0,0,.28); color: #d1d9e3; font: .68rem/1.7 "SFMono-Regular", Consolas, monospace; }
+    .code-float .pink { color: #e6a3d8; }
+    .code-float .green { color: #bce878; }
+    .code-float .blue { color: #8dc8f8; }
+
+    .benefits { padding: 94px 0 100px; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .benefit-card { padding: 28px 27px 30px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+    .icon-box { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; background: #eef7d9; color: #596e2f; }
+    .icon-box svg { width: 23px; height: 23px; }
+    .benefit-card:nth-child(2) .icon-box { background: #efedff; color: #6654d2; }
+    .benefit-card:nth-child(3) .icon-box { background: #fff0e4; color: #a46737; }
+    .benefit-card h3 { margin: 22px 0 9px; font-size: 1.12rem; letter-spacing: -.025em; }
+    .benefit-card p { margin: 0; color: var(--muted); font-size: .91rem; line-height: 1.7; }
+
+    .tracks { padding: 94px 0 100px; background: #f1f0eb; }
+    .track-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .track-card { display: flex; flex-direction: column; min-height: 304px; padding: 26px; border: 1px solid #e4e3dc; border-radius: var(--radius); background: var(--paper); transition: transform .2s ease, box-shadow .2s ease; }
+    .track-card:hover { transform: translateY(-5px); box-shadow: 0 18px 38px rgba(28,36,49,.09); }
+    .track-top { display: flex; align-items: center; justify-content: space-between; }
+    .track-icon { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; background: #e9f2d5; color: #5b7330; font: 800 1rem "SFMono-Regular", Consolas, monospace; }
+    .track-card:nth-child(2) .track-icon { background: #ece9ff; color: #6654d2; }
+    .track-card:nth-child(3) .track-icon { background: #ffe9dc; color: #a66334; }
+    .level { padding: 6px 9px; border-radius: 999px; background: #efeee9; color: #656c76; font-size: .69rem; font-weight: 750; }
+    .track-card h3 { margin: 24px 0 9px; font-size: 1.3rem; letter-spacing: -.04em; }
+    .track-card p { margin: 0; color: var(--muted); font-size: .89rem; line-height: 1.7; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+    .tag { padding: 6px 9px; border-radius: 7px; background: white; color: #596373; font-size: .7rem; font-weight: 650; }
+    .track-link { display: inline-flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 24px; color: #344522; font-size: .82rem; font-weight: 800; }
+    .track-link svg { width: 15px; height: 15px; transition: transform .2s ease; }
+    .track-link:hover svg { transform: translateX(4px); }
+
+    .mentors { padding: 94px 0 100px; background: var(--navy); color: white; }
+    .mentors .section-heading p { color: #b7c1ce; }
+    .mentors .eyebrow { color: var(--lime); }
+    .mentor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+    .mentor-tier { text-align: center; position: relative; display: flex; flex-direction: column; padding: 27px; border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); background: rgba(255,255,255,.055); }
+    .mentor-tier--featured { border-color: var(--lime); background: rgba(201,243,106,.075); }
+    .tier-badge { align-self: flex-start; padding: 6px 9px; border-radius: 999px; background: rgba(255,255,255,.11); color: #dce3ed; font-size: .68rem; font-weight: 750; }
+    .mentor-tier--featured .tier-badge { background: var(--lime); color: var(--navy); }
+    .mentor-tier h3 { margin: 20px 0 6px; font-size: 1.35rem; letter-spacing: -.04em; }
+    .tier-experience { margin: 0; color: #aeb9c7; font-size: .8rem; }
+    .tier-price { display: flex; align-items: baseline; gap: 5px; margin: 24px 0 7px; }
+    .tier-price strong { color: white; font-size: 2rem; letter-spacing: -.06em; }
+    .tier-price span { color: #aeb9c7; font-size: .8rem; }
+    .tier-price-note { margin: 0 0 20px; color: #aeb9c7; font-size: .75rem; }
+    .tier-list { display: grid; gap: 11px; margin: 0 0 26px; padding: 18px 0 0; border-top: 1px solid rgba(255,255,255,.12); list-style: none; }
+    .tier-list li { display: flex; gap: 9px; color: #d4dbe4; font-size: .82rem; line-height: 1.5; }
+    .tier-list li::before { content: "✓"; color: var(--lime); font-weight: 900; }
+    .mentor-tier .button { width: 100%; margin-top: auto; }
+    .mentors-note { max-width: 700px; margin: 22px auto 0; color: #aeb9c7; font-size: .76rem; line-height: 1.65; text-align: center; }
+
+    .how { padding: 100px 0; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    .step { position: relative; }
+    .step:not(:last-child)::after { position: absolute; top: 25px; left: 65px; width: calc(100% - 25px); height: 1px; content: ""; background: #d9dccf; }
+    .step-number { position: relative; z-index: 1; width: 51px; height: 51px; display: grid; place-items: center; border: 1px solid #dfe1d5; border-radius: 50%; background: var(--paper); color: #62713b; font-size: .9rem; font-weight: 850; }
+    .step h3 { margin: 21px 0 8px; font-size: 1.08rem; }
+    .step p { max-width: 290px; margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.7; }
+
+    .checkpoints { padding: 82px 0; background: #eef4df; }
+    .checkpoint-panel { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 48px; padding: 42px; border: 1px solid #dce6c7; border-radius: 25px; background: #f9fbf4; }
+    .checkpoint-copy h2 { margin: 14px 0 12px; font-size: clamp(1.8rem, 3.5vw, 2.7rem); line-height: 1.08; letter-spacing: -.055em; }
+    .checkpoint-copy p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.75; }
+    .checkpoint-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+    .checkpoint-list li { display: grid; grid-template-columns: 39px 1fr; gap: 13px; align-items: start; }
+    .checkpoint-step { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 12px; background: #e9f2d5; color: #526b2b; font-size: .75rem; font-weight: 850; }
+    .checkpoint-list strong { display: block; margin: 1px 0 4px; font-size: .89rem; }
+    .checkpoint-list span:last-child { display: block; color: var(--muted); font-size: .8rem; line-height: 1.6; }
+
+    .testimonial { padding: 0 0 100px; }
+    .quote-card { position: relative; max-width: 900px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 34px; margin: 0 auto; padding: 42px 48px; overflow: hidden; border-radius: 26px; background: var(--navy); color: white; }
+    .quote-card::after { position: absolute; right: 135px; bottom: -140px; width: 350px; height: 350px; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(201,243,106,.11), transparent 67%); }
+    .quote-mark { color: var(--lime); font: 4rem/ .7 Georgia, serif; }
+    .quote-card blockquote { position: relative; z-index: 1; margin: 14px 0 24px; font-size: clamp(1.25rem, 2.7vw, 1.8rem); line-height: 1.45; letter-spacing: -.035em; }
+    .quote-author { display: flex; align-items: center; gap: 11px; }
+    .quote-author .mentor-avatar { background: #b1c4a4; }
+    .quote-author strong, .quote-author small { display: block; }
+    .quote-author strong { font-size: .82rem; }
+    .quote-author small { margin-top: 4px; color: #aab5c2; font-size: .73rem; }
+    .quote-score { position: relative; z-index: 1; min-width: 124px; padding-left: 32px; border-left: 1px solid rgba(255,255,255,.16); text-align: center; }
+    .quote-score strong { display: block; color: var(--lime); font-size: 2.5rem; letter-spacing: -.06em; }
+    .quote-score span { display: block; margin-top: 4px; color: #b7c1ce; font-size: .74rem; line-height: 1.5; }
+
+    .final-cta { padding: 0 0 100px; }
+    .cta-panel { display: flex; align-items: center; justify-content: space-between; gap: 34px; padding: 42px 48px; border: 1px solid #dfe5d1; border-radius: 24px; background: #f0f7df; }
+    .cta-panel h2 { max-width: 560px; margin: 0 0 9px; font-size: clamp(1.65rem, 3vw, 2.4rem); line-height: 1.12; letter-spacing: -.055em; }
+    .cta-panel p { margin: 0; color: #64704f; font-size: .91rem; }
+    .cta-panel .button { flex: 0 0 auto; }
+    footer { padding: 27px 0; border-top: 1px solid var(--line); }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; color: var(--muted); font-size: .77rem; }
+    .footer-row .brand { color: var(--ink); font-size: 1rem; }
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a:hover { color: var(--ink); }
+
+    dialog { width: min(480px, calc(100% - 32px)); max-height: min(740px, calc(100% - 32px)); padding: 0; overflow: auto; border: 1px solid #e8e8e1; border-radius: 22px; background: var(--paper); color: var(--ink); box-shadow: 0 28px 90px rgba(0,0,0,.3); }
+    dialog::backdrop { background: rgba(10,17,28,.68); backdrop-filter: blur(4px); }
+    .dialog-inner { padding: 30px; }
+    .dialog-head { display: flex; justify-content: space-between; gap: 20px; }
+    .dialog-head h2 { margin: 9px 0 7px; font-size: 1.75rem; letter-spacing: -.055em; }
+    .dialog-head p { margin: 0; color: var(--muted); font-size: .87rem; line-height: 1.6; }
+    .dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--ink); font-size: 1.25rem; cursor: pointer; }
+    .booking-form { display: grid; gap: 15px; margin-top: 24px; }
+    .booking-form label { display: grid; gap: 7px; font-size: .8rem; font-weight: 750; }
+    .booking-form input, .booking-form select { width: 100%; min-height: 46px; padding: 0 12px; border: 1px solid #dedfd8; border-radius: 10px; background: white; color: var(--ink); }
+    .booking-form .button { width: 100%; margin-top: 4px; }
+    .form-note { margin: 0; color: var(--muted); font-size: .73rem; line-height: 1.5; }
+    .form-note[data-state="error"] { color: #a33b32; }
+    .form-success { padding: 34px 0 10px; text-align: center; }
+    .success-icon { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 50%; background: #eaf5d5; color: #4f7021; font-size: 1.6rem; }
+    .form-success h3 { margin: 0 0 8px; font-size: 1.55rem; }
+    .form-success p { margin: 0 0 22px; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; gap: 35px; }
+      .hero h1 { font-size: clamp(2.7rem, 6vw, 4rem); }
+      .code-float { right: -12px; }
+      .mentor-grid { grid-template-columns: repeat(2, 1fr); }
+      .quote-card { padding: 36px; }
+    }
+    @media (max-width: 700px) {
+      .wrap { width: min(100% - 36px, 540px); }
+      .nav { min-height: 68px; }
+      .nav .button { display: none; }
+      .menu-toggle { display: grid; place-items: center; }
+      .brand-image { width: 190px; }
+      .nav-links { position: absolute; top: 67px; right: 0; left: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 18px 17px; border-bottom: 1px solid rgba(255,255,255,.12); background: var(--navy); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 13px 3px; }
+      .hero { padding: 63px 0 75px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero-copy { max-width: 540px; }
+      .hero h1 { max-width: 490px; font-size: clamp(2.75rem, 11vw, 4rem); }
+      .hero-copy > p { font-size: 1rem; }
+      .session-card { max-width: 490px; margin-inline: auto; transform: none; }
+      .code-float { right: -8px; bottom: 58px; }
+      .benefits, .tracks { padding: 74px 0; }
+      .section-heading { margin-bottom: 34px; }
+      .benefit-grid, .track-grid { grid-template-columns: 1fr; gap: 13px; }
+      .benefit-card { padding: 24px; }
+      .track-card { min-height: 275px; }
+      .mentors { padding: 74px 0; }
+      .mentor-grid { grid-template-columns: 1fr; gap: 13px; }
+      .mentor-tier { padding: 24px; }
+      .how { padding: 76px 0; }
+      .steps { grid-template-columns: 1fr; gap: 27px; }
+      .step { display: grid; grid-template-columns: 51px 1fr; column-gap: 17px; align-items: start; }
+      .step:not(:last-child)::after { top: 50px; left: 25px; width: 1px; height: calc(100% - 20px); }
+      .step-number { grid-row: span 2; }
+      .step h3 { margin: 4px 0 6px; }
+      .step p { max-width: none; }
+      .checkpoints { padding: 58px 0; }
+      .checkpoint-panel { grid-template-columns: 1fr; gap: 28px; padding: 27px 23px; }
+      .testimonial { padding-bottom: 74px; }
+      .quote-card { grid-template-columns: 1fr; gap: 22px; padding: 30px 26px; }
+      .quote-score { display: flex; align-items: center; gap: 13px; padding: 0; border: 0; text-align: left; }
+      .quote-score strong { font-size: 1.8rem; }
+      .quote-score span { margin-top: 0; }
+      .final-cta { padding-bottom: 72px; }
+      .cta-panel { align-items: flex-start; flex-direction: column; padding: 30px 25px; }
+      .footer-row { flex-wrap: wrap; }
+      .footer-links { order: 3; width: 100%; }
+    }
+    @media (max-width: 420px) {
+      .wrap { width: calc(100% - 30px); }
+      .brand-image { width: 165px; }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero-actions .button { width: 100%; }
+      .social-proof { align-items: flex-start; flex-wrap: wrap; }
+      .session-card { padding: 11px; }
+      .call-screen { min-height: 220px; }
+      .mentor-head, .student-head { bottom: 102px; transform: scale(.85); }
+      .code-float { right: -3px; bottom: 55px; width: 167px; padding: 10px; font-size: .61rem; }
+      .session-time { font-size: .67rem; }
+      .dialog-inner { padding: 23px; }
+      .footer-links { gap: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Główna nawigacja">
+      <a class="brand" href="#start" aria-label="Learn From A Programmer — strona główna">
+        <img class="brand-image" src="logo-dark.png" width="1200" height="320" alt="Learn From A Programmer — kodowanie z mentorem na żywo">
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#jak-to-dziala">Jak to działa</a>
+        <a href="#sciezki">Ścieżki nauki</a>
+        <a href="#mentorzy">Mentorzy i ceny</a>
+        <a href="#sprawdzanie-postepow">Sprawdzanie postępów</a>
+        <a href="#opinie">Opinie</a>
+        <a href="login.html">Zaloguj się</a>
+      </div>
+      <button class="button" type="button" data-open-booking>Umów bezpłatną rozmowę <span aria-hidden="true">↗</span></button>
+      <button class="menu-toggle" type="button" aria-label="Otwórz menu" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Programowanie, które klika</span>
+          <h1>Ucz się kodować.<br><span>Nie sam.</span></h1>
+          <p>Pracuj nad prawdziwymi projektami z aktywnym programistą po drugiej stronie ekranu. Ty wybierasz cel — razem układacie drogę.</p>
+          <div class="hero-actions">
+            <a class="button" href="mailto:marekkrzeszowski294@gmail.com">Napisz: marekkrzeszowski294@gmail.com <span aria-hidden="true">↗</span></a>
+            <a class="button button--outline" href="tel:+48793698700">Zadzwoń: 793 698 700 <span aria-hidden="true">↗</span></a>
+            <a class="button button--outline" href="#jak-to-dziala">Poznaj metodę <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="social-proof">
+            <div class="avatar-stack" aria-hidden="true"><span>MK</span><span>AK</span><span>JP</span><span>+</span></div>
+            <span><strong>1:1 z mentorem</strong><br>na żywo, w Twoim tempie</span>
+          </div>
+        </div>
+
+        <div class="session-card" aria-label="Podgląd sesji programowania na żywo">
+          <div class="session-top"><span>learn from a programmer / sesja 01</span><span class="live-badge"><i class="live-dot"></i> NA ŻYWO</span></div>
+          <div class="call-screen">
+            <div class="window-light"></div><div class="mentor-head" aria-hidden="true"></div><div class="student-head" aria-hidden="true"></div>
+            <span class="call-label">Michał · mentor</span>
+            <div class="call-controls" aria-hidden="true"><span>◉</span><span>⌕</span><span class="end-call">■</span></div>
+          </div>
+          <div class="session-bottom">
+            <div class="mentor-info"><span class="mentor-avatar">MK</span><span><strong>Michał K.</strong><small>Frontend developer · 6 lat doświadczenia</small></span></div>
+            <span class="session-time">● 42:18</span>
+          </div>
+          <div class="code-float" aria-hidden="true"><span class="pink">const</span> <span class="blue">TwojProjekt</span> = () =&gt; {<br>&nbsp;&nbsp;<span class="pink">return</span> &lt;<span class="green">Sukces</span> /&gt;;<br>}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits" aria-labelledby="benefits-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <span class="eyebrow">Więcej niż kurs</span>
+          <h2 id="benefits-title">Nauka dopasowana<br>do prawdziwego życia.</h2>
+          <p>Bez oglądania kolejnych godzin filmów w pojedynkę. Uczysz się przez działanie, z kimś, kto pomoże Ci przejść przez każdy problem.</p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit-card">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 1 0 9 9M12 7v5l3 2m4-8 2-2m-5 0h3v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>Na żywo, 1:1</h3><p>Rozmawiacie, udostępniasz ekran i rozwiązujecie problemy razem — dokładnie wtedy, gdy ich potrzebujesz.</p>
+          </article>
+          <article class="benefit-card">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.4 5.1L20 9l-4 3.9.9 5.6-4.9-2.7-4.9 2.7.9-5.6L4 9l5.6-.9L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+            <h3>Twój cel, Twój plan</h3><p>Zmiana branży, pierwsza aplikacja czy lepszy kod w pracy? Plan nauki powstaje wokół tego, co chcesz osiągnąć.</p>
+          </article>
+          <article class="benefit-card">
+            <span class="icon-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>Praktyka zamiast teorii</h3><p>Budujesz projekty do portfolio, poznajesz dobre nawyki i rozumiesz, dlaczego Twój kod działa.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tracks" id="sciezki" aria-labelledby="tracks-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <span class="eyebrow">Wybierz swoją ścieżkę</span>
+          <h2 id="tracks-title">Od pierwszej linijki<br>do własnego projektu.</h2>
+          <p>Nie wiesz, od czego zacząć? Spokojnie — wspólnie wybierzecie technologię i poziom dopasowany do Ciebie.</p>
+        </div>
+        <div class="track-grid">
+          <article class="track-card">
+            <div class="track-top"><span class="track-icon">&lt;/&gt;</span><span class="level">Od podstaw</span></div>
+            <h3>Strony internetowe</h3><p>Naucz się tworzyć responsywne strony i interfejsy, które działają na każdym urządzeniu.</p>
+            <div class="tag-row"><span class="tag">HTML &amp; CSS</span><span class="tag">JavaScript</span><span class="tag">React</span></div>
+            <a class="track-link" href="#kontakt" data-open-booking>Sprawdź tę ścieżkę <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+          <article class="track-card">
+            <div class="track-top"><span class="track-icon">{ }</span><span class="level">Od podstaw</span></div>
+            <h3>Programowanie i Python</h3><p>Myśl jak programista, automatyzuj zadania i twórz swoje pierwsze działające aplikacje.</p>
+            <div class="tag-row"><span class="tag">Python</span><span class="tag">Git</span><span class="tag">Algorytmy</span></div>
+            <a class="track-link" href="#kontakt" data-open-booking>Sprawdź tę ścieżkę <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+          <article class="track-card">
+            <div class="track-top"><span class="track-icon">⌘</span><span class="level">Dla ambitnych</span></div>
+            <h3>Rozwój w IT</h3><p>Przygotuj się do rozmów technicznych, uporządkuj wiedzę i wskocz na kolejny poziom.</p>
+            <div class="tag-row"><span class="tag">Code review</span><span class="tag">Portfolio</span><span class="tag">Rozmowy IT</span></div>
+            <a class="track-link" href="#kontakt" data-open-booking>Sprawdź tę ścieżkę <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="mentors" id="mentorzy" aria-labelledby="mentors-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <span class="eyebrow">Ty wybierasz poziom</span>
+          <h2 id="mentors-title">Różni mentorzy.<br>Różne możliwości.</h2>
+          <p>Dobierz doświadczenie mentora i cenę do swoich potrzeb. Każdy poziom oznacza naukę 1:1 na żywo — różni się zakresem doświadczenia i wsparcia.</p>
+        </div>
+        <div class="mentor-grid">
+          <article class="mentor-tier">
+            <span class="tier-badge">Dobry start</span>
+            <h3>Mentor Junior</h3>
+            <p class="tier-experience">Młody programista, który zna drogę od pierwszych linijek kodu.</p>
+            <div class="tier-price"><strong>Niższa cena</strong></div>
+            <p class="tier-price-note">Przystępna stawka za spotkanie 1:1</p>
+            <ul class="tier-list">
+              <li>Wsparcie w podstawach programowania</li>
+              <li>Wspólne ćwiczenia i pierwsze projekty</li>
+              <li>Przyjazna nauka krok po kroku</li>
+            </ul>
+            <button class="button button--outline" type="button" data-open-booking data-mentor-level="junior">Wybierz Juniora <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mentor-tier mentor-tier--featured">
+            <span class="tier-badge">Najczęściej wybierany</span>
+            <h3>Mentor Mid</h3>
+            <p class="tier-experience">Doświadczony programista z praktyką w pracy nad produktami.</p>
+            <div class="tier-price"><strong>Średnia cena</strong></div>
+            <p class="tier-price-note">Więcej praktycznego doświadczenia</p>
+            <ul class="tier-list">
+              <li>Praktyczne podejście do realnych projektów</li>
+              <li>Pomoc w dobrych nawykach i code review</li>
+              <li>Przygotowanie do pierwszej pracy w IT</li>
+            </ul>
+            <button class="button" type="button" data-open-booking data-mentor-level="mid">Wybierz Mida <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mentor-tier">
+            <span class="tier-badge">Zaawansowany rozwój</span>
+            <h3>Mentor Senior</h3>
+            <p class="tier-experience">Senior z szeroką wiedzą techniczną i perspektywą branżową.</p>
+            <div class="tier-price"><strong>Wyższa cena</strong></div>
+            <p class="tier-price-note">Indywidualne wsparcie eksperckie</p>
+            <ul class="tier-list">
+              <li>Zaawansowane zagadnienia i architektura</li>
+              <li>Rozwój kariery i przygotowanie do rozmów</li>
+              <li>Mentoring dopasowany do Twojego kierunku</li>
+            </ul>
+            <button class="button button--outline" type="button" data-open-booking data-mentor-level="senior">Wybierz Seniora <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="mentor-tier">
+            <span class="tier-badge">Eksperckie wsparcie</span>
+            <h3>Tech Lead</h3>
+            <p class="tier-experience">Lider techniczny z doświadczeniem w projektowaniu i rozwijaniu zespołów.</p>
+            <div class="tier-price"><strong>Cena premium</strong></div>
+            <p class="tier-price-note">Najbardziej zaawansowany mentoring</p>
+            <ul class="tier-list">
+              <li>Architektura i skalowanie aplikacji</li>
+              <li>System design i decyzje techniczne</li>
+              <li>Przywództwo i rozwój zespołu IT</li>
+            </ul>
+            <button class="button button--outline" type="button" data-open-booking data-mentor-level="tech-lead">Wybierz Tech Leada <span aria-hidden="true">↗</span></button>
+          </article>
+        </div>
+        <p class="mentors-note">Ceny zależą od wybranego mentora, czasu spotkania i zakresu nauki. Konkretne stawki, dostępność oraz doświadczenie mentorów warto przedstawić transparentnie przed rezerwacją.</p>
+      </div>
+    </section>
+
+    <section class="how" id="jak-to-dziala" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="section-heading">
+          <span class="eyebrow">Prosty początek</span>
+          <h2 id="how-title">Trzy kroki. Jeden konkretny cel.</h2>
+          <p>Bez zobowiązań na start. Najpierw poznajemy Twoje potrzeby, potem wspólnie działamy.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><span class="step-number">01</span><h3>Pogadajmy o Twoim celu</h3><p>Krótka, bezpłatna rozmowa pomoże ustalić, czego chcesz się nauczyć i na jakim jesteś etapie.</p></article>
+          <article class="step"><span class="step-number">02</span><h3>Poznaj swojego mentora</h3><p>Dobierzemy aktywnego programistę i zaplanujemy naukę w tempie, które pasuje do Twojego kalendarza.</p></article>
+          <article class="step"><span class="step-number">03</span><h3>Kodujecie razem</h3><p>Spotykacie się online, pracujecie nad zadaniami i budujecie umiejętności przydatne w praktyce.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="checkpoints" id="sprawdzanie-postepow" aria-labelledby="checkpoints-title">
+      <div class="wrap">
+        <div class="checkpoint-panel">
+          <div class="checkpoint-copy">
+            <span class="eyebrow">Nauka, która zostaje</span>
+            <h2 id="checkpoints-title">Co trzy lekcje sprawdzacie postępy.</h2>
+            <p>Mentor może przygotować zadania w stylu rekrutacyjnym i sprawdzić, które umiejętności już opanowałeś. Jeśli coś wymaga powtórki, wracacie konkretnie do tego tematu.</p>
+          </div>
+          <ol class="checkpoint-list">
+            <li><span class="checkpoint-step">01</span><span><strong>Wyzwanie po trzech lekcjach</strong><span>Rozwiązujesz praktyczne zadania i sprawdzasz wiedzę zdobytą podczas spotkań.</span></span></li>
+            <li><span class="checkpoint-step">02</span><span><strong>Powrót do brakującego tematu</strong><span>Wspólnie wskazujecie, co warto jeszcze przećwiczyć — bez powtarzania całego materiału.</span></span></li>
+            <li><span class="checkpoint-step">03</span><span><strong>Jedno dokładniejsze wyjaśnienie</strong><span>Mentor wyjaśnia trudny temat jeszcze raz, innymi słowami i na przykładzie. Potem robisz ćwiczenie, które pomaga utrwalić wiedzę.</span></span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonial" id="opinie" aria-label="Opinia uczestnika">
+      <div class="wrap">
+        <div class="quote-card">
+          <div>
+            <span class="quote-mark" aria-hidden="true">“</span>
+            <blockquote>W końcu ktoś nie podał mi gotowego rozwiązania, tylko pokazał, jak samemu do niego dojść. Po miesiącu mam pierwszą aplikację w portfolio.</blockquote>
+            <div class="quote-author"><span class="mentor-avatar">AK</span><span><strong>Anna K.</strong><small>Uczyła się JavaScriptu od podstaw</small></span></div>
+          </div>
+          <div class="quote-score"><strong>1:1</strong><span>pełna uwaga<br>mentora</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" id="kontakt">
+      <div class="wrap">
+        <div class="cta-panel">
+          <div><h2>Twój następny krok może być prostszy, niż myślisz.</h2><p>Opowiedz nam, czego chcesz się nauczyć. Pierwsza rozmowa jest bezpłatna.</p></div>
+          <button class="button button--dark" type="button" data-open-booking>Umów bezpłatną rozmowę <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <a class="brand" href="#start" aria-label="Learn From A Programmer — strona główna"><img class="brand-image" src="logo.png" width="1200" height="320" alt="Learn From A Programmer — kodowanie z mentorem na żywo"></a>
+      <span>© <span id="year"></span> Learn From A Programmer. Nauka, która działa.</span>
+      <div class="footer-links"><a href="mailto:hello@learnfromaprogrammer.com">Kontakt</a><a href="#start">Do góry ↑</a></div>
+    </div>
+  </footer>
+
+  <dialog id="booking-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <div><span class="eyebrow">Pierwszy krok</span><h2 id="dialog-title">Porozmawiajmy.</h2><p>Opowiedz nam o swoim celu — odezwiemy się, żeby umówić bezpłatną rozmowę.</p></div>
+        <button class="dialog-close" type="button" aria-label="Zamknij okno">×</button>
+      </div>
+      <form class="booking-form">
+        <label>Jak masz na imię?<input name="name" autocomplete="given-name" required placeholder="Np. Alex"></label>
+        <label>Adres e-mail<input name="email" type="email" autocomplete="email" required placeholder="alex@example.com"></label>
+        <label>Czego chcesz się nauczyć?
+          <select name="topic" required>
+            <option value="" selected disabled>Wybierz temat</option>
+            <option>Tworzenia stron internetowych</option>
+            <option>Programowania w Pythonie</option>
+            <option>Rozwoju kariery w IT</option>
+            <option>Jeszcze nie wiem — chcę porozmawiać</option>
+          </select>
+        </label>
+        <label>Jaki poziom mentora Cię interesuje?
+          <select name="mentorLevel" id="mentor-level">
+            <option value="undecided" selected>Jeszcze nie wiem</option>
+            <option value="junior">Junior — niższa cena</option>
+            <option value="mid">Mid — średnia cena</option>
+            <option value="senior">Senior — wyższa cena</option>
+            <option value="tech-lead">Tech Lead — cena premium</option>
+          </select>
+        </label>
+        <button class="button button--dark" type="submit">Poproś o kontakt <span aria-hidden="true">↗</span></button>
+        <p class="form-note" data-booking-message role="status">Zgłoszenie zostanie zapisane w bazie danych.</p>
+      </form>
+      <div class="form-success" role="status" hidden>
+        <span class="success-icon" aria-hidden="true">✓</span><h3>Dziękujemy!</h3><p>Zgłoszenie zapisano. Skontaktujemy się z Tobą, aby umówić bezpłatną rozmowę.</p>
+        <button class="button button--dark success-close" type="button">Gotowe</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    const bookingDialog = document.querySelector("#booking-dialog");
+    const bookingForm = document.querySelector(".booking-form");
+    const formSuccess = document.querySelector(".form-success");
+    const mentorLevel = document.querySelector("#mentor-level");
+    const bookingMessage = document.querySelector("[data-booking-message]");
+
+    document.querySelector("#year").textContent = new Date().getFullYear();
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Otwórz menu" : "Zamknij menu");
+      navLinks.classList.toggle("is-open", !isOpen);
+    });
+
+    navLinks.addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        navLinks.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Otwórz menu");
+      }
+    });
+
+    document.querySelectorAll("[data-open-booking]").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (trigger.dataset.mentorLevel) mentorLevel.value = trigger.dataset.mentorLevel;
+        if (!bookingDialog.open) bookingDialog.showModal();
+      });
+    });
+
+    document.querySelector(".dialog-close").addEventListener("click", () => bookingDialog.close());
+    document.querySelector(".success-close").addEventListener("click", () => bookingDialog.close());
+    bookingDialog.addEventListener("click", (event) => {
+      if (event.target === bookingDialog) bookingDialog.close();
+    });
+    bookingDialog.addEventListener("close", () => {
+      bookingForm.reset();
+      bookingForm.hidden = false;
+      formSuccess.hidden = true;
+      bookingMessage.textContent = "Zgłoszenie zostanie zapisane w bazie danych.";
+      bookingMessage.removeAttribute("data-state");
+    });
+    bookingForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!bookingForm.reportValidity()) return;
+      const submitButton = bookingForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      bookingMessage.textContent = "";
+      try {
+        const values = new FormData(bookingForm);
+        await window.apiRequest("booking", {
+          method: "POST",
+          body: {
+            name: values.get("name"),
+            email: values.get("email"),
+            topic: values.get("topic"),
+            mentorLevel: values.get("mentorLevel"),
+          },
+        });
+        bookingForm.hidden = true;
+        formSuccess.hidden = false;
+        document.querySelector(".success-close").focus();
+      } catch (error) {
+        bookingMessage.textContent = error.message;
+        bookingMessage.dataset.state = "error";
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

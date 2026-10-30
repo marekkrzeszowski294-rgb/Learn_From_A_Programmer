@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Panel ucznia Learn From A Programmer — lekcje, ścieżka nauki i postępy.">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <title>Panel ucznia — Learn From A Programmer</title>
+  <link rel="stylesheet" href="account.css">
+  <script src="backend.js" defer></script>
+  <script src="account.js" defer></script>
+</head>
+<body class="dashboard-body" data-dashboard-role="student">
+  <header class="dashboard-topbar">
+    <a class="brand" href="Web.html" aria-label="Learn From A Programmer — strona główna"><img class="brand-image" src="logo.png" width="1200" height="320" alt="Learn From A Programmer — kodowanie z mentorem na żywo"></a>
+    <nav aria-label="Nawigacja panelu"><a href="#lekcje">Moje lekcje</a><a href="#postepy">Postępy</a><a href="Web.html#kontakt">Umów rozmowę</a><button class="button button--dark" type="button" data-logout>Wyloguj</button></nav>
+  </header>
+  <main class="dashboard">
+    <p class="form-message" data-dashboard-message role="status" hidden></p>
+    <section class="dashboard-heading">
+      <div><span class="eyebrow">Twoja nauka</span><h1 data-dashboard-heading>Ładowanie panelu…</h1><p>Śledź swoje postępy zapisane na koncie.</p></div>
+      <span class="role-pill">Uczeń</span>
+    </section>
+    <section class="stats-grid" aria-label="Postępy w nauce">
+      <article class="stat-card"><span class="stat-label">Zakończone lekcje</span><strong><span data-completed-lessons>0</span> <small>/ 3</small></strong><small>Do najbliższego punktu kontrolnego</small></article>
+      <article class="stat-card"><span class="stat-label">Zgłoszenia rozmowy</span><strong data-student-request-count>0</strong><small>Wysłane z tego konta lub adresu e-mail</small></article>
+      <article class="stat-card"><span class="stat-label">Mentor</span><strong>Nieprzypisany</strong><small>Skontaktujemy się po zgłoszeniu</small></article>
+      <article class="stat-card"><span class="stat-label">Spotkanie</span><strong>Brak</strong><small>Terminy nie są jeszcze umawiane w panelu</small></article>
+    </section>
+    <div class="dashboard-grid">
+      <div>
+        <section class="panel" id="lekcje">
+          <div class="panel-heading"><h2>Twoje zgłoszenia</h2><a href="Web.html#kontakt">Umów rozmowę →</a></div>
+          <div data-student-bookings><p class="quiet-note">Ładowanie zgłoszeń…</p></div>
+          <div class="panel-heading" style="margin-top:24px"><h2>Postęp lekcji</h2><span class="status">Punkt kontrolny po 3 lekcjach</span></div>
+          <ul class="list-clean">
+            <li data-student-lesson="1"><span class="list-icon" data-lesson-icon>1</span><span><strong>Zmienne, typy i warunki</strong><small>Lekcja 1 · <span data-lesson-status>do zrealizowania</span></small></span><span class="status status--waiting" data-lesson-badge>Do zrobienia</span></li>
+            <li data-student-lesson="2"><span class="list-icon" data-lesson-icon>2</span><span><strong>Funkcje i proste zadania</strong><small>Lekcja 2 · <span data-lesson-status>do zrealizowania</span></small></span><span class="status status--waiting" data-lesson-badge>Do zrobienia</span></li>
+            <li data-student-lesson="3"><span class="list-icon" data-lesson-icon>3</span><span><strong>Tablice i metody</strong><small>Lekcja 3 · <span data-lesson-status>do zrealizowania</span></small></span><span class="status status--waiting" data-lesson-badge>Do zrobienia</span></li>
+          </ul>
+        </section>
+        <section class="panel" id="postepy">
+          <div class="panel-heading"><h2>Punkt kontrolny po trzech lekcjach</h2><span class="status status--waiting">Zadania rekrutacyjne</span></div>
+          <div class="checkpoint" data-checkpoint hidden><h3>Punkt kontrolny gotowy</h3><p>Ukończyłeś trzy lekcje. Skontaktuj się z mentorem, aby ustalić kolejny etap nauki.</p></div>
+          <div class="checkpoint" data-before-checkpoint><h3>Ukończ trzy lekcje, aby odblokować punkt kontrolny</h3><p>Postęp zapisuje się na Twoim koncie.</p></div>
+        </section>
+      </div>
+      <aside>
+        <section class="panel">
+          <div class="panel-heading"><h2>Zapis postępów</h2></div>
+          <p class="quiet-note">Zaznacz ukończoną lekcję. Zmiana zostanie zapisana na Twoim koncie w bazie danych.</p>
+          <button class="button button--dark wide-button" type="button" data-complete-lesson>Oznacz kolejną lekcję jako zakończoną</button>
+        </section>
+      </aside>
+    </div>
+    <p class="dashboard-footer">Learn From A Programmer · Panel ucznia</p>
+  </main>
+</body>
+</html>
